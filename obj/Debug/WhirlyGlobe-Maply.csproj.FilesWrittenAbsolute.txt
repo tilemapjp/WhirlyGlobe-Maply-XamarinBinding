@@ -1,0 +1,1 @@
+/Users/Cameron/Documents/LiveFlight/XamarinProject/LiveFlight/WhirlyGlobe-Maply/obj/Debug/Xamarin.iOS,Version=v1.0.AssemblyAttribute.cs
