@@ -1,0 +1,12 @@
+obj/Debug/ios/ObjCRuntime/Messaging.g.cs
+obj/Debug/ios/AFNetworking/AFHTTPClient.g.cs
+obj/Debug/ios/AFNetworking/AFHTTPRequestOperation.g.cs
+obj/Debug/ios/AFNetworking/AFImageRequestOperation.g.cs
+obj/Debug/ios/AFNetworking/AFJSONRequestOperation.g.cs
+obj/Debug/ios/AFNetworking/AFPropertyListRequestOperation.g.cs
+obj/Debug/ios/AFNetworking/AFURLConnectionOperation.g.cs
+obj/Debug/ios/AFNetworking/AFXMLRequestOperation.g.cs
+obj/Debug/ios/AFNetworking/AFNetworkingImageExtras.g.cs
+obj/Debug/ios/SupportDelegates.g.cs
+obj/Debug/ios/ObjCRuntime/Trampolines.g.cs
+obj/Debug/ios/ObjCRuntime/Libraries.g.cs

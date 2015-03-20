@@ -1,4 +1,4 @@
 using System;
 using ObjCRuntime;
 
-[assembly: LinkWith ("libWhirlyGlobeMaplyComponent.a", LinkTarget.ArmV7 | LinkTarget.ArmV7s | LinkTarget.Simulator, SmartLink = true, ForceLoad = true)]
+[assembly: LinkWith ("libWhirlyGlobeMaplyComponent.a", LinkTarget.ArmV7 | LinkTarget.ArmV7s | LinkTarget.Simulator, SmartLink = true, ForceLoad = true, LinkerFlags = "-lxml2 -lz")]

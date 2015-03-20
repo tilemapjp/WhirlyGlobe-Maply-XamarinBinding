@@ -4,13 +4,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{F22AE412-6E1D-47DE-9A0C-3AABBDB777D7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>WhirlyGlobeMaply</RootNamespace>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>WhirlyGlobe-Maply</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C40D154A-D7FE-4543-961F-E1EFE58D650D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>AFNetworkingXamarin</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>AFNetworking-Xamarin</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,8 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="libWhirlyGlobeMaplyComponent.linkwith.cs">
-      <DependentUpon>libWhirlyGlobeMaplyComponent.a</DependentUpon>
+    <Compile Include="libAFNetworking.linkwith.cs">
+      <DependentUpon>libAFNetworking.a</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -53,12 +53,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
   <ItemGroup>
-    <ObjcBindingNativeLibrary Include="libWhirlyGlobeMaplyComponent.a" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="AFNetworking-Xamarin\AFNetworking-Xamarin.csproj">
-      <Project>{C40D154A-D7FE-4543-961F-E1EFE58D650D}</Project>
-      <Name>AFNetworking-Xamarin</Name>
-    </ProjectReference>
+    <ObjcBindingNativeLibrary Include="libAFNetworking.a" />
   </ItemGroup>
 </Project>

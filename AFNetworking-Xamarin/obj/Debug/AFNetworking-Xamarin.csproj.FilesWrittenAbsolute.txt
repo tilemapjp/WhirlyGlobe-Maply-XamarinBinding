@@ -1,0 +1,5 @@
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/AFNetworking-Xamarin/obj/Debug/Xamarin.iOS,Version=v1.0.AssemblyAttribute.cs
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/AFNetworking-Xamarin/bin/Debug/AFNetworking-Xamarin.dll.mdb
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/AFNetworking-Xamarin/bin/Debug/AFNetworking-Xamarin.dll
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/AFNetworking-Xamarin/obj/Debug/AFNetworking-Xamarin.dll
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/AFNetworking-Xamarin/obj/Debug/AFNetworking-Xamarin.dll.mdb

@@ -1,1 +1,3 @@
-/Users/Cameron/Documents/LiveFlight/XamarinProject/LiveFlight/WhirlyGlobe-Maply/obj/Debug/Xamarin.iOS,Version=v1.0.AssemblyAttribute.cs
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/obj/Debug/Xamarin.iOS,Version=v1.0.AssemblyAttribute.cs
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/bin/Debug/AFNetworking-Xamarin.dll
+/Users/Cameron/Desktop/GitHub/WhirlyGlobe-Xamarin/bin/Debug/AFNetworking-Xamarin.dll.mdb

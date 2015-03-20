@@ -10,7 +10,7 @@ using System;
 namespace WhirlyGlobeMaply
 {
 
-	public enum MaplyVectorType : uint {
+	public enum MaplyVectorObjectType : uint {
 		MaplyVectorNoneType,
 		MaplyVectorPointType,
 		MaplyVectorLinearType,
@@ -18,7 +18,7 @@ namespace WhirlyGlobeMaply
 		MaplyVectorMultiType
 	}
 
-	public enum MaplyImage : uint {
+	public enum MaplyQuadImageFormat : uint {
 		MaplyImageIntRGBA,
 		MaplyImageUShort565,
 		MaplyImageUShort4444,
@@ -38,18 +38,18 @@ namespace WhirlyGlobeMaply
 		MaplyImage4Layer8Bit
 	}
 
-	public enum MaplyThread : uint {
+	public enum MaplyThreadMode : uint {
 		MaplyThreadCurrent,
 		MaplyThreadAny
 	}
 
-	public enum MaplyLabel: uint {
+	public enum MaplyLabelJustify: uint {
 		MaplyLabelJustifyLeft,
 		MaplyLabelJustifyMiddle,
 		MaplyLabelJustifyRight
 	}
 
-	public enum MaplyDataStyle : uint {
+	public enum MaplyQuadPagingDataStyle : uint {
 		MaplyDataStyleAdd,
 		MaplyDataStyleReplace
 	}

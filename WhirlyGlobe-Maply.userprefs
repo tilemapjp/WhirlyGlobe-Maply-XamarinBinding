@@ -1,0 +1,16 @@
+﻿<Properties StartupItem="WhirlyGlobe-Maply.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="ApiDefinition.cs">
+    <Files>
+      <File FileName="ApiDefinition.cs" Line="141" Column="36" />
+      <File FileName="StructsAndEnums.cs" Line="52" Column="29" />
+      <File FileName="AFNetworking-Xamarin/ApiDefinition.cs" Line="152" Column="3" />
+      <File FileName="AFNetworking-Xamarin/StructsAndEnums.cs" Line="10" Column="2" />
+      <File FileName="libWhirlyGlobeMaplyComponent.linkwith.cs" Line="4" Column="179" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

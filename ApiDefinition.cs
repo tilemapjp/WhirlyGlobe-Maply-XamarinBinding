@@ -11,10 +11,52 @@ using System.Drawing;
 using ObjCRuntime;
 using Foundation;
 using UIKit;
+using AFNetworking;
+using CoreGraphics;
 
 namespace WhirlyGlobeMaply
 {
-	/*// @interface MaplyActiveObject : NSObject
+
+	/*
+	 * Custom built C# objects
+	 * these should fit right into the rest of the binding
+	 */
+
+	public class MaplyCoordinate {
+
+
+	}
+
+	public class MaplyBoundingBox {
+
+
+	}
+
+	public class MaplyCoordinate3d {
+
+
+	}
+
+	public class MaplyTileID {
+
+
+	}
+
+	public class WGCoordinate {
+
+
+	}
+
+	public class WGViewControllerLayer {
+
+
+	}
+
+	/*
+	 * Translated objects
+	 */
+
+	// @interface MaplyActiveObject : NSObject
 	[BaseType (typeof (NSObject))]
 	interface MaplyActiveObject {
 
@@ -76,9 +118,12 @@ namespace WhirlyGlobeMaply
 	[BaseType (typeof (NSObject))]
 	interface MaplyScreenMarker {
 
+		[Export ("get_loc")]
+		void Get_Loc(MaplyCoordinate coordinate);
+
 		// @property (assign, nonatomic) MaplyCoordinate loc;
 		[Export ("loc", ArgumentSemantic.UnsafeUnretained)]
-		Loc loc { get; set; }
+		MaplyCoordinate loc { get; set; }
 
 		// @property (assign, nonatomic) CGSize size;
 		[Export ("size", ArgumentSemantic.UnsafeUnretained)]
@@ -127,11 +172,11 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyCoordinate)geoToLocal:(MaplyCoordinate)coord;
 		[Export ("geoToLocal:")]
-		GeoToLocal geoToLocal (MaplyCoordinateSystem coord);
+		MaplyCoordinate geoToLocal (MaplyCoordinateSystem coord);
 
 		// -(MaplyCoordinate)localToGeo:(MaplyCoordinate)coord;
 		[Export ("localToGeo:")]
-		LocalToGeo localToGeo (MaplyCoordinateSystem coord);
+		MaplyCoordinate localToGeo (MaplyCoordinateSystem coord);
 
 		// -(NSString *)getSRS;
 		[Export ("getSRS")]
@@ -148,7 +193,7 @@ namespace WhirlyGlobeMaply
 
 		// -(id)initWithBoundingBox:(MaplyBoundingBox)bbox;
 		[Export ("initWithBoundingBox:")]
-		IntPtr Constructor ( bbox);
+		IntPtr Constructor (MaplyBoundingBox bbox);
 	}
 
 	//@interface 
@@ -159,21 +204,23 @@ namespace WhirlyGlobeMaply
 
 	}
 
+	//@interface 
+
 	// @interface MaplyVectorObject : NSObject
 	[BaseType (typeof (NSObject))]
 	interface MaplyVectorObject {
 
 		// -(id)initWithPoint:(MaplyCoordinate *)coord attributes:(NSDictionary *)attr;
 		[Export ("initWithPoint:attributes:")]
-		IntPtr Constructor ( coord, NSDictionary attr);
+		IntPtr Constructor (MaplyCoordinate coord, NSDictionary attr);
 
 		// -(id)initWithLineString:(MaplyCoordinate *)coords numCoords:(int)numCoords attributes:(NSDictionary *)attr;
 		[Export ("initWithLineString:numCoords:attributes:")]
-		IntPtr Constructor ( coords, int numCoords, NSDictionary attr);
+		IntPtr Constructor (MaplyCoordinate coords, int numCoords, NSDictionary attr);
 
 		// -(id)initWithAreal:(MaplyCoordinate *)coords numCoords:(int)numCoords attributes:(NSDictionary *)attr;
-		[Export ("initWithAreal:numCoords:attributes:")]
-		IntPtr Constructor ( coords, int numCoords, NSDictionary attr);
+		//[Export ("initWithAreal:numCoords:attributes:")]
+		//IntPtr Constructor (MaplyCoordinate coords, int numCoords, NSDictionary attr);
 
 		// @property (nonatomic, strong) NSObject * userObject;
 		[Export ("userObject", ArgumentSemantic.Retain)]
@@ -225,23 +272,23 @@ namespace WhirlyGlobeMaply
 
 		// -(void)addHole:(MaplyCoordinate *)coords numCoords:(int)numCoords;
 		[Export ("addHole:numCoords:")]
-		void AddHole ( coords, int numCoords);
+		void AddHole (MaplyCoordinate coords, int numCoords);
 
 		// -(MaplyVectorObjectType)vectorType;
 		[Export ("vectorType")]
-		VectorType ();
+		MaplyVectorObjectType VectorType ();
 
 		// -(_Bool)pointInAreal:(MaplyCoordinate)coord;
 		[Export ("pointInAreal:")]
-		bool PointInAreal ( coord);
+		bool PointInAreal (bool coord);
 
 		// -(_Bool)pointNearLinear:(MaplyCoordinate)coord distance:(float)maxDistance inViewController:(MaplyBaseViewController *)vc;
 		[Export ("pointNearLinear:distance:inViewController:")]
-		bool PointNearLinear ( coord, float maxDistance, MaplyBaseViewController vc);
+		bool PointNearLinear (bool coord, float maxDistance, MaplyBaseViewController vc);
 
 		// -(MaplyCoordinate)center;
 		[Export ("center")]
-		Center ();
+		MaplyCoordinate Center ();
 
 		// -(void)mergeVectorsFrom:(MaplyVectorObject *)otherVec;
 		[Export ("mergeVectorsFrom:")]
@@ -249,27 +296,27 @@ namespace WhirlyGlobeMaply
 
 		// -(_Bool)linearMiddle:(MaplyCoordinate *)middle rot:(double *)rot;
 		[Export ("linearMiddle:rot:")]
-		bool LinearMiddle ( middle, double rot);
+		bool LinearMiddle (MaplyCoordinate middle, double rot);
 
 		// -(_Bool)linearMiddle:(MaplyCoordinate *)middle rot:(double *)rot displayCoordSys:(MaplyCoordinateSystem *)coordSys;
 		[Export ("linearMiddle:rot:displayCoordSys:")]
-		bool LinearMiddle ( middle, double rot, MaplyCoordinateSystem coordSys);
+		bool LinearMiddle (MaplyCoordinate middle, double rot, MaplyCoordinateSystem coordSys);
 
 		// -(_Bool)middleCoordinate:(MaplyCoordinate *)middle;
 		[Export ("middleCoordinate:")]
-		bool MiddleCoordinate ( middle);
+		bool MiddleCoordinate (MaplyCoordinate middle);
 
 		// -(_Bool)largestLoopCenter:(MaplyCoordinate *)center mbrLL:(MaplyCoordinate *)ll mbrUR:(MaplyCoordinate *)ur;
 		[Export ("largestLoopCenter:mbrLL:mbrUR:")]
-		bool LargestLoopCenter ( center,  ll,  ur);
+		bool LargestLoopCenter (MaplyCoordinate center, MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(_Bool)centroid:(MaplyCoordinate *)centroid;
 		[Export ("centroid:")]
-		bool Centroid ( centroid);
+		bool Centroid (MaplyCoordinate centroid);
 
 		// -(_Bool)boundingBoxLL:(MaplyCoordinate *)ll ur:(MaplyCoordinate *)ur;
 		[Export ("boundingBoxLL:ur:")]
-		bool BoundingBoxLL ( ll,  ur);
+		bool BoundingBoxLL (MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(NSArray *)asCLLocationArrays;
 		[Export ("asCLLocationArrays")]
@@ -301,7 +348,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyVectorObject *)clipToMbr:(MaplyCoordinate)ll upperRight:(MaplyCoordinate)ur;
 		[Export ("clipToMbr:upperRight:")]
-		MaplyVectorObject ClipToMbr ( ll,  ur);
+		MaplyVectorObject ClipToMbr (MaplyCoordinate ll, MaplyCoordinate  ur);
 	}
 
 	// @interface MaplyVectorDatabase : NSObject
@@ -318,7 +365,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyVectorObject *)fetchArealsForPoint:(MaplyCoordinate)coord;
 		[Export ("fetchArealsForPoint:")]
-		MaplyVectorObject FetchArealsForPoint ( coord);
+		MaplyVectorObject FetchArealsForPoint (MaplyCoordinate coord);
 
 		// -(MaplyVectorObject *)fetchAllVectors;
 		[Export ("fetchAllVectors")]
@@ -335,7 +382,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate loc;
 		[Export ("loc", ArgumentSemantic.UnsafeUnretained)]
-		Loc { get; set; }
+		MaplyCoordinate Loc { get; set; }
 
 		// @property (assign, nonatomic) float minVis;
 		[Export ("minVis", ArgumentSemantic.UnsafeUnretained)]
@@ -370,7 +417,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate3d pos;
 		[Export ("pos", ArgumentSemantic.UnsafeUnretained)]
-		Pos { get; set; }
+		MaplyCoordinate3d Pos { get; set; }
 
 		// @property (assign, nonatomic) _Bool viewDependent;
 		[Export ("viewDependent", ArgumentSemantic.UnsafeUnretained)]
@@ -394,8 +441,8 @@ namespace WhirlyGlobeMaply
 		IntPtr Constructor (string name, string vertexFileName, string fragFileName, MaplyBaseViewController baseViewC);
 
 		// -(id)initWithName:(NSString *)name vertex:(NSString *)vertexProg fragment:(NSString *)fragProg viewC:(MaplyBaseViewController *)baseViewC;
-		[Export ("initWithName:vertex:fragment:viewC:")]
-		IntPtr Constructor (string name, string vertexProg, string fragProg, MaplyBaseViewController baseViewC);
+		//[Export ("initWithName:vertex:fragment:viewC:")]
+		//IntPtr Constructor (string name, string vertexProg, string fragProg, MaplyBaseViewController baseViewC);
 
 		// @property NSString * name;
 		[Export ("name")]
@@ -459,8 +506,8 @@ namespace WhirlyGlobeMaply
 		IntPtr Constructor (NSData data);
 
 		// -(id)initWithPNGorJPEGDataArray:(NSArray *)data;
-		[Export ("initWithPNGorJPEGDataArray:")]
-		IntPtr Constructor (NSObject [] data);
+		//[Export ("initWithPNGorJPEGDataArray:")]
+		//IntPtr Constructor (NSObject [] data);
 
 		// -(id)initWithRandomData:(id)theObj;
 		[Export ("initWithRandomData:")]
@@ -493,7 +540,7 @@ namespace WhirlyGlobeMaply
 		// @required -(_Bool)tileIsLocal:(MaplyTileID)tileID;
 		[Export ("tileIsLocal:")]
 		[Abstract]
-		bool TileIsLocal ( tileID);
+		bool TileIsLocal (MaplyTileID tileID);
 
 		// @required -(MaplyCoordinateSystem *)coordSys;
 		[Export ("coordSys")]
@@ -502,31 +549,31 @@ namespace WhirlyGlobeMaply
 
 		// @optional -(_Bool)validTile:(MaplyTileID)tileID bbox:(MaplyBoundingBox *)bbox;
 		[Export ("validTile:bbox:")]
-		bool ValidTile ( tileID,  bbox);
+		bool ValidTile (MaplyTileID tileID, MaplyBoundingBox bbox);
 
 		// @optional -(int)tileSizeForTile:(MaplyTileID)tileID;
 		[Export ("tileSizeForTile:")]
-		int TileSizeForTile ( tileID);
+		int TileSizeForTile (MaplyTileID tileID);
 
 		// @optional -(id)imageForTile:(MaplyTileID)tileID;
 		[Export ("imageForTile:")]
-		NSObject ImageForTile ( tileID);
+		NSObject ImageForTile (MaplyTileID tileID);
 
 		// @optional -(id)imageForTile:(MaplyTileID)tileID frame:(int)frame;
 		[Export ("imageForTile:frame:")]
-		NSObject ImageForTile ( tileID, int frame);
+		NSObject ImageForTile (MaplyTileID tileID, int frame);
 
 		// @optional -(void)startFetchLayer:(id)layer tile:(MaplyTileID)tileID;
 		[Export ("startFetchLayer:tile:")]
-		void StartFetchLayer (NSObject layer,  tileID);
+		void StartFetchLayer (NSObject layer, MaplyTileID tileID);
 
 		// @optional -(void)startFetchLayer:(id)layer tile:(MaplyTileID)tileID frame:(int)frame;
 		[Export ("startFetchLayer:tile:frame:")]
-		void StartFetchLayer (NSObject layer,  tileID, int frame);
+		void StartFetchLayer (NSObject layer, MaplyTileID tileID, int frame);
 
 		// @optional -(void)tileUnloaded:(MaplyTileID)tileID;
 		[Export ("tileUnloaded:")]
-		void TileUnloaded ( tileID);
+		void TileUnloaded (MaplyTileID tileID);
 	}
 
 	// @interface MaplyElevationChunk : NSObject
@@ -572,12 +619,12 @@ namespace WhirlyGlobeMaply
 		// @required -(MaplyElevationChunk *)elevForTile:(MaplyTileID)tileID;
 		[Export ("elevForTile:")]
 		[Abstract]
-		MaplyElevationChunk ElevForTile ( tileID);
+		MaplyElevationChunk ElevForTile (MaplyTileID tileID);
 
 		// @required -(_Bool)tileIsLocal:(MaplyTileID)tileID;
 		[Export ("tileIsLocal:")]
 		[Abstract]
-		bool TileIsLocal ( tileID);
+		bool TileIsLocal (MaplyTileID tileID);
 	}
 
 	// @interface MaplyElevationSourceTester : NSObject <MaplyElevationSourceDelegate>
@@ -696,7 +743,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyQuadImageFormat imageFormat;
 		[Export ("imageFormat")]
-		ImageFormat { get; set; }
+		MaplyQuadImageFormat ImageFormat { get; set; }
 
 		// @property (nonatomic) int borderTexel;
 		[Export ("borderTexel")]
@@ -728,15 +775,15 @@ namespace WhirlyGlobeMaply
 
 		// -(void)loadedImages:(id)images forTile:(MaplyTileID)tileID;
 		[Export ("loadedImages:forTile:")]
-		void LoadedImages (NSObject images,  tileID);
+		void LoadedImages (NSObject images, MaplyTileID tileID);
 
 		// -(void)loadedImages:(id)images forTile:(MaplyTileID)tileID frame:(int)frame;
 		[Export ("loadedImages:forTile:frame:")]
-		void LoadedImages (NSObject images,  tileID, int frame);
+		void LoadedImages (NSObject images, MaplyTileID tileID, int frame);
 
 		// -(void)loadError:(NSError *)error forTile:(MaplyTileID)tileID;
 		[Export ("loadError:forTile:")]
-		void LoadError (NSError error,  tileID);
+		void LoadError (NSError error, MaplyTileID tileID);
 
 		// -(void)reset;
 		[Export ("reset")]
@@ -804,7 +851,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addScreenMarkers:(NSArray *)markers desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addScreenMarkers:desc:mode:")]
-		MaplyComponentObject AddScreenMarkers (NSObject [] markers, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddScreenMarkers (NSObject [] markers, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addMarkers:(NSArray *)markers desc:(NSDictionary *)desc;
 		[Export ("addMarkers:desc:")]
@@ -812,7 +859,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addMarkers:(NSArray *)markers desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addMarkers:desc:mode:")]
-		MaplyComponentObject AddMarkers (NSObject [] markers, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddMarkers (NSObject [] markers, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addScreenLabels:(NSArray *)labels desc:(NSDictionary *)desc;
 		[Export ("addScreenLabels:desc:")]
@@ -820,7 +867,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addScreenLabels:(NSArray *)labels desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addScreenLabels:desc:mode:")]
-		MaplyComponentObject AddScreenLabels (NSObject [] labels, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddScreenLabels (NSObject [] labels, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addLabels:(NSArray *)labels desc:(NSDictionary *)desc;
 		[Export ("addLabels:desc:")]
@@ -828,7 +875,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addLabels:(NSArray *)labels desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addLabels:desc:mode:")]
-		MaplyComponentObject AddLabels (NSObject [] labels, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddLabels (NSObject [] labels, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addVectors:(NSArray *)vectors desc:(NSDictionary *)desc;
 		[Export ("addVectors:desc:")]
@@ -836,15 +883,15 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addVectors:(NSArray *)vectors desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addVectors:desc:mode:")]
-		MaplyComponentObject AddVectors (NSObject [] vectors, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddVectors (NSObject [] vectors, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)instanceVectors:(MaplyComponentObject *)baseObj desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("instanceVectors:desc:mode:")]
-		MaplyComponentObject InstanceVectors (MaplyComponentObject baseObj, NSDictionary desc,  threadMode);
+		MaplyComponentObject InstanceVectors (MaplyComponentObject baseObj, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addWideVectors:(NSArray *)vectors desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addWideVectors:desc:mode:")]
-		MaplyComponentObject AddWideVectors (NSObject [] vectors, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddWideVectors (NSObject [] vectors, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addWideVectors:(NSArray *)vectors desc:(NSDictionary *)desc;
 		[Export ("addWideVectors:desc:")]
@@ -856,7 +903,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addShapes:(NSArray *)shapes desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addShapes:desc:mode:")]
-		MaplyComponentObject AddShapes (NSObject [] shapes, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddShapes (NSObject [] shapes, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addStickers:(NSArray *)stickers desc:(NSDictionary *)desc;
 		[Export ("addStickers:desc:")]
@@ -864,15 +911,15 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyComponentObject *)addStickers:(NSArray *)stickers desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addStickers:desc:mode:")]
-		MaplyComponentObject AddStickers (NSObject [] stickers, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddStickers (NSObject [] stickers, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(void)changeSticker:(MaplyComponentObject *)compObj desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("changeSticker:desc:mode:")]
-		void ChangeSticker (MaplyComponentObject compObj, NSDictionary desc,  threadMode);
+		void ChangeSticker (MaplyComponentObject compObj, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addBillboards:(NSArray *)billboards desc:(NSDictionary *)desc mode:(MaplyThreadMode)threadMode;
 		[Export ("addBillboards:desc:mode:")]
-		MaplyComponentObject AddBillboards (NSObject [] billboards, NSDictionary desc,  threadMode);
+		MaplyComponentObject AddBillboards (NSObject [] billboards, NSDictionary desc, MaplyThreadMode threadMode);
 
 		// -(MaplyComponentObject *)addSelectionVectors:(NSArray *)vectors;
 		[Export ("addSelectionVectors:")]
@@ -892,7 +939,7 @@ namespace WhirlyGlobeMaply
 
 		// -(void)addAnnotation:(MaplyAnnotation *)annotate forPoint:(MaplyCoordinate)coord offset:(CGPoint)offset;
 		[Export ("addAnnotation:forPoint:offset:")]
-		void AddAnnotation (MaplyAnnotation annotate,  coord, CGPoint offset);
+		void AddAnnotation (MaplyAnnotation annotate, MaplyCoordinate coord, CGPoint offset);
 
 		// -(void)removeAnnotation:(MaplyAnnotation *)annotate;
 		[Export ("removeAnnotation:")]
@@ -920,19 +967,19 @@ namespace WhirlyGlobeMaply
 
 		// -(CGPoint)screenPointFromGeo:(MaplyCoordinate)geoCoord;
 		[Export ("screenPointFromGeo:")]
-		CGPoint ScreenPointFromGeo ( geoCoord);
+		CGPoint ScreenPointFromGeo (MaplyCoordinate geoCoord);
 
 		// -(_Bool)animateToPosition:(MaplyCoordinate)newPos onScreen:(CGPoint)loc time:(NSTimeInterval)howLong;
 		[Export ("animateToPosition:onScreen:time:")]
-		bool AnimateToPosition ( newPos, CGPoint loc, double howLong);
+		bool AnimateToPosition (MaplyCoordinate newPos, CGPoint loc, double howLong);
 
 		// -(MaplyTexture *)addTexture:(UIImage *)image imageFormat:(MaplyQuadImageFormat)imageFormat wrapFlags:(int)wrapFlags mode:(MaplyThreadMode)threadMode;
 		[Export ("addTexture:imageFormat:wrapFlags:mode:")]
-		MaplyTexture AddTexture (UIImage image,  imageFormat, int wrapFlags,  threadMode);
+		MaplyTexture AddTexture (UIImage image, MaplyQuadImageFormat imageFormat, int wrapFlags, MaplyThreadMode threadMode);
 
 		// -(void)removeTexture:(MaplyTexture *)image mode:(MaplyThreadMode)threadMode;
 		[Export ("removeTexture:mode:")]
-		void RemoveTexture (MaplyTexture image,  threadMode);
+		void RemoveTexture (MaplyTexture image, MaplyThreadMode threadMode);
 
 		// -(void)setMaxLayoutObjects:(int)maxLayoutObjects;
 		[Export ("setMaxLayoutObjects:")]
@@ -948,15 +995,15 @@ namespace WhirlyGlobeMaply
 
 		// -(void)removeObjects:(NSArray *)theObjs mode:(MaplyThreadMode)threadMode;
 		[Export ("removeObjects:mode:")]
-		void RemoveObjects (NSObject [] theObjs,  threadMode);
+		void RemoveObjects (NSObject [] theObjs, MaplyThreadMode threadMode);
 
 		// -(void)disableObjects:(NSArray *)theObjs mode:(MaplyThreadMode)threadMode;
 		[Export ("disableObjects:mode:")]
-		void DisableObjects (NSObject [] theObjs,  threadMode);
+		void DisableObjects (NSObject [] theObjs, MaplyThreadMode threadMode);
 
 		// -(void)enableObjects:(NSArray *)theObjs mode:(MaplyThreadMode)threadMode;
 		[Export ("enableObjects:mode:")]
-		void EnableObjects (NSObject [] theObjs,  threadMode);
+		void EnableObjects (NSObject [] theObjs, MaplyThreadMode threadMode);
 
 		// -(void)startChanges;
 		[Export ("startChanges")]
@@ -996,7 +1043,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyCoordinate3d)displayPointFromGeo:(MaplyCoordinate)geoCoord;
 		[Export ("displayPointFromGeo:")]
-		DisplayPointFromGeo ( geoCoord);
+		MaplyCoordinate3d DisplayPointFromGeo (MaplyCoordinate geoCoord);
 
 		// -(void)startAnimation;
 		[Export ("startAnimation")]
@@ -1028,7 +1075,7 @@ namespace WhirlyGlobeMaply
 
 		// -(float)currentMapZoom:(MaplyCoordinate)coordinate;
 		[Export ("currentMapZoom:")]
-		float CurrentMapZoom ( coordinate);
+		float CurrentMapZoom (MaplyCoordinate coordinate);
 
 		// -(MaplyCoordinateSystem *)coordSystem;
 		[Export ("coordSystem")]
@@ -1041,7 +1088,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate loc;
 		[Export ("loc", ArgumentSemantic.UnsafeUnretained)]
-		Loc { get; set; }
+		MaplyCoordinate Loc { get; set; }
 
 		// @property (assign, nonatomic) CGSize size;
 		[Export ("size", ArgumentSemantic.UnsafeUnretained)]
@@ -1065,7 +1112,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyLabelJustify justify;
 		[Export ("justify", ArgumentSemantic.UnsafeUnretained)]
-		Justify { get; set; }
+		MaplyLabelJustify Justify { get; set; }
 
 		// @property (nonatomic, strong) NSObject * userObject;
 		[Export ("userObject", ArgumentSemantic.Retain)]
@@ -1078,7 +1125,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate loc;
 		[Export ("loc", ArgumentSemantic.UnsafeUnretained)]
-		Loc { get; set; }
+		MaplyCoordinate Loc { get; set; }
 
 		// @property (assign, nonatomic) float rotation;
 		[Export ("rotation", ArgumentSemantic.UnsafeUnretained)]
@@ -1131,7 +1178,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate loc;
 		[Export ("loc", ArgumentSemantic.UnsafeUnretained)]
-		Loc { get; set; }
+		MaplyCoordinate Loc { get; set; }
 
 		// @property (assign, nonatomic) CGSize size;
 		[Export ("size", ArgumentSemantic.UnsafeUnretained)]
@@ -1169,7 +1216,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate center;
 		[Export ("center", ArgumentSemantic.UnsafeUnretained)]
-		Center { get; set; }
+		MaplyCoordinate Center { get; set; }
 
 		// @property (assign, nonatomic) float radius;
 		[Export ("radius", ArgumentSemantic.UnsafeUnretained)]
@@ -1186,7 +1233,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate center;
 		[Export ("center", ArgumentSemantic.UnsafeUnretained)]
-		Center { get; set; }
+		MaplyCoordinate Center { get; set; }
 
 		// @property (assign, nonatomic) float radius;
 		[Export ("radius", ArgumentSemantic.UnsafeUnretained)]
@@ -1207,7 +1254,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate baseCenter;
 		[Export ("baseCenter", ArgumentSemantic.UnsafeUnretained)]
-		BaseCenter { get; set; }
+		MaplyCoordinate BaseCenter { get; set; }
 
 		// @property (assign, nonatomic) float baseHeight;
 		[Export ("baseHeight", ArgumentSemantic.UnsafeUnretained)]
@@ -1232,11 +1279,11 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate startPt;
 		[Export ("startPt", ArgumentSemantic.UnsafeUnretained)]
-		StartPt { get; set; }
+		MaplyCoordinate StartPt { get; set; }
 
 		// @property (assign, nonatomic) MaplyCoordinate endPt;
 		[Export ("endPt", ArgumentSemantic.UnsafeUnretained)]
-		EndPt { get; set; }
+		MaplyCoordinate EndPt { get; set; }
 
 		// @property (assign, nonatomic) float height;
 		[Export ("height", ArgumentSemantic.UnsafeUnretained)]
@@ -1257,7 +1304,7 @@ namespace WhirlyGlobeMaply
 
 		// -(id)initWithCoords:(MaplyCoordinate3d *)coords numCoords:(int)numCoords;
 		[Export ("initWithCoords:numCoords:")]
-		IntPtr Constructor ( coords, int numCoords);
+		IntPtr Constructor (MaplyCoordinate3d coords, int numCoords);
 
 		// @property (assign, nonatomic) float lineWidth;
 		[Export ("lineWidth", ArgumentSemantic.UnsafeUnretained)]
@@ -1265,7 +1312,7 @@ namespace WhirlyGlobeMaply
 
 		// -(int)getCoords:(MaplyCoordinate3d **)retCoords;
 		[Export ("getCoords:")]
-		int GetCoords ( retCoords);
+		int GetCoords (MaplyCoordinate3d retCoords);
 	}
 
 	// @interface MaplySticker : NSObject
@@ -1274,11 +1321,11 @@ namespace WhirlyGlobeMaply
 
 		// @property (assign, nonatomic) MaplyCoordinate ll;
 		[Export ("ll", ArgumentSemantic.UnsafeUnretained)]
-		Ll { get; set; }
+		MaplyCoordinate Ll { get; set; }
 
 		// @property (assign, nonatomic) MaplyCoordinate ur;
 		[Export ("ur", ArgumentSemantic.UnsafeUnretained)]
-		Ur { get; set; }
+		MaplyCoordinate Ur { get; set; }
 
 		// @property (assign, nonatomic) float rotation;
 		[Export ("rotation", ArgumentSemantic.UnsafeUnretained)]
@@ -1298,7 +1345,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyQuadImageFormat imageFormat;
 		[Export ("imageFormat")]
-		ImageFormat { get; set; }
+		MaplyQuadImageFormat ImageFormat { get; set; }
 	}
 
 	// @interface MaplyBillboard : NSObject
@@ -1307,7 +1354,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyCoordinate3d center;
 		[Export ("center")]
-		Center { get; set; }
+		MaplyCoordinate3d Center { get; set; }
 
 		// @property (nonatomic) CGSize size;
 		[Export ("size")]
@@ -1337,11 +1384,11 @@ namespace WhirlyGlobeMaply
 
 		// @optional -(void)maplyViewController:(MaplyViewController *)viewC didSelect:(NSObject *)selectedObj atLoc:(WGCoordinate)coord onScreen:(CGPoint)screenPt;
 		[Export ("maplyViewController:didSelect:atLoc:onScreen:")]
-		void DidSelect (MaplyViewController viewC, NSObject selectedObj,  coord, CGPoint screenPt);
+		void DidSelect (MaplyViewController viewC, NSObject selectedObj, WGCoordinate coord, CGPoint screenPt);
 
 		// @optional -(void)maplyViewController:(MaplyViewController *)viewC didTapAt:(MaplyCoordinate)coord;
 		[Export ("maplyViewController:didTapAt:")]
-		void DidTapAt (MaplyViewController viewC,  coord);
+		void DidTapAt (MaplyViewController viewC, MaplyCoordinate coord);
 
 		// @optional -(void)maplyViewControllerDidStartMoving:(MaplyViewController *)viewC userMotion:(_Bool)userMotion;
 		[Export ("maplyViewControllerDidStartMoving:userMotion:")]
@@ -1349,7 +1396,7 @@ namespace WhirlyGlobeMaply
 
 		// @optional -(void)maplyViewController:(MaplyViewController *)viewC didStopMoving:(MaplyCoordinate *)corners userMotion:(_Bool)userMotion;
 		[Export ("maplyViewController:didStopMoving:userMotion:")]
-		void DidStopMoving (MaplyViewController viewC,  corners, bool userMotion);
+		void DidStopMoving (MaplyViewController viewC, MaplyCoordinate corners, bool userMotion);
 
 		// @optional -(void)maplyViewController:(MaplyViewController *)viewC didTapAnnotation:(MaplyAnnotation *)annotation;
 		[Export ("maplyViewController:didTapAnnotation:")]
@@ -1386,7 +1433,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyCoordinate3d displayCenter;
 		[Export ("displayCenter")]
-		DisplayCenter { get; set; }
+		MaplyCoordinate3d DisplayCenter { get; set; }
 
 		// @property (assign, nonatomic) _Bool pinchGesture;
 		[Export ("pinchGesture", ArgumentSemantic.UnsafeUnretained)]
@@ -1447,15 +1494,15 @@ namespace WhirlyGlobeMaply
 
 		// -(void)getViewExtentsLL:(MaplyCoordinate *)ll ur:(MaplyCoordinate *)ur;
 		[Export ("getViewExtentsLL:ur:")]
-		void GetViewExtentsLL ( ll,  ur);
+		void GetViewExtentsLL (MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(void)setViewExtentsLL:(MaplyCoordinate)ll ur:(MaplyCoordinate)ur;
 		[Export ("setViewExtentsLL:ur:")]
-		void SetViewExtentsLL ( ll,  ur);
+		void SetViewExtentsLL (MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(void)animateToPosition:(MaplyCoordinate)newPos time:(NSTimeInterval)howLong;
 		[Export ("animateToPosition:time:")]
-		void AnimateToPosition ( newPos, double howLong);
+		void AnimateToPosition (MaplyCoordinate newPos, double howLong);
 
 		// -(void)animateToExtentsWindowSize:(CGSize)windowSize contentOffset:(CGPoint)contentOffset time:(NSTimeInterval)howLong;
 		[Export ("animateToExtentsWindowSize:contentOffset:time:")]
@@ -1463,19 +1510,19 @@ namespace WhirlyGlobeMaply
 
 		// -(_Bool)animateToPosition:(MaplyCoordinate)newPos onScreen:(CGPoint)loc time:(NSTimeInterval)howLong;
 		[Export ("animateToPosition:onScreen:time:")]
-		bool AnimateToPosition ( newPos, CGPoint loc, double howLong);
+		bool AnimateToPosition (MaplyCoordinate newPos, CGPoint loc, double howLong);
 
 		// -(void)setPosition:(MaplyCoordinate)newPos;
 		[Export ("setPosition:")]
-		void SetPosition ( newPos);
+		void SetPosition (MaplyCoordinate newPos);
 
 		// -(void)setPosition:(MaplyCoordinate)newPos height:(float)height;
 		[Export ("setPosition:height:")]
-		void SetPosition ( newPos, float height);
+		void SetPosition (MaplyCoordinate newPos, float height);
 
 		// -(void)getPosition:(MaplyCoordinate *)pos height:(float *)height;
 		[Export ("getPosition:height:")]
-		void GetPosition ( pos, float height);
+		void GetPosition (MaplyCoordinate pos, float height);
 
 		// -(void)getZoomLimitsMin:(float *)minHeight max:(float *)maxHeight;
 		[Export ("getZoomLimitsMin:max:")]
@@ -1487,15 +1534,15 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyCoordinate)geoFromScreenPoint:(CGPoint)point;
 		[Export ("geoFromScreenPoint:")]
-		GeoFromScreenPoint (CGPoint point);
+		MaplyCoordinate GeoFromScreenPoint (CGPoint point);
 
 		// -(float)findHeightToViewBounds:(MaplyBoundingBox *)bbox pos:(MaplyCoordinate)pos;
 		[Export ("findHeightToViewBounds:pos:")]
-		float FindHeightToViewBounds ( bbox,  pos);
+		float FindHeightToViewBounds (MaplyBoundingBox bbox, MaplyCoordinate pos);
 
 		// -(MaplyBoundingBox)getCurrentExtents;
 		[Export ("getCurrentExtents")]
-		GetCurrentExtents ();
+		MaplyBoundingBox GetCurrentExtents ();
 	}
 
 	// @protocol MaplyPagingDelegate
@@ -1515,7 +1562,7 @@ namespace WhirlyGlobeMaply
 		// @required -(void)startFetchForTile:(MaplyTileID)tileID forLayer:(MaplyQuadPagingLayer *)layer;
 		[Export ("startFetchForTile:forLayer:")]
 		[Abstract]
-		void StartFetchForTile ( tileID, MaplyQuadPagingLayer layer);
+		void StartFetchForTile (MaplyTileID tileID, MaplyQuadPagingLayer layer);
 	}
 
 	// @interface MaplyQuadPagingLayer : MaplyViewControllerLayer
@@ -1556,35 +1603,35 @@ namespace WhirlyGlobeMaply
 
 		// -(void)addData:(NSArray *)dataObjects forTile:(MaplyTileID)tileID;
 		[Export ("addData:forTile:")]
-		void AddData (NSObject [] dataObjects,  tileID);
+		void AddData (NSObject [] dataObjects, MaplyTileID tileID);
 
 		// -(void)addData:(NSArray *)dataObjects forTile:(MaplyTileID)tileID style:(MaplyQuadPagingDataStyle)dataStyle;
 		[Export ("addData:forTile:style:")]
-		void AddData (NSObject [] dataObjects,  tileID,  dataStyle);
+		void AddData (NSObject [] dataObjects, MaplyTileID tileID, MaplyQuadPagingDataStyle dataStyle);
 
 		// -(void)tileFailedToLoad:(MaplyTileID)tileID;
 		[Export ("tileFailedToLoad:")]
-		void TileFailedToLoad ( tileID);
+		void TileFailedToLoad (MaplyTileID tileID);
 
 		// -(void)tileDidLoad:(MaplyTileID)tileID;
 		[Export ("tileDidLoad:")]
-		void TileDidLoad ( tileID);
+		void TileDidLoad (MaplyTileID tileID);
 
 		// -(void)tile:(MaplyTileID)tileID hasNumParts:(int)numParts;
 		[Export ("tile:hasNumParts:")]
-		void Tile ( tileID, int numParts);
+		void Tile (MaplyTileID tileID, int numParts);
 
 		// -(void)tileDidLoad:(MaplyTileID)tileID part:(int)whichPart;
 		[Export ("tileDidLoad:part:")]
-		void TileDidLoad ( tileID, int whichPart);
+		void TileDidLoad (MaplyTileID tileID, int whichPart);
 
 		// -(void)geoBoundsforTile:(MaplyTileID)tileID ll:(MaplyCoordinate *)ll ur:(MaplyCoordinate *)ur;
 		[Export ("geoBoundsforTile:ll:ur:")]
-		void GeoBoundsforTile ( tileID,  ll,  ur);
+		void GeoBoundsforTile (MaplyTileID tileID, MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(void)boundsforTile:(MaplyTileID)tileID ll:(MaplyCoordinate *)ll ur:(MaplyCoordinate *)ur;
 		[Export ("boundsforTile:ll:ur:")]
-		void BoundsforTile ( tileID,  ll,  ur);
+		void BoundsforTile (MaplyTileID tileID, MaplyCoordinate ll, MaplyCoordinate ur);
 
 		// -(void)reload;
 		[Export ("reload")]
@@ -1601,7 +1648,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyBoundingBox bbox;
 		[Export ("bbox")]
-		Bbox { get; set; }
+		MaplyBoundingBox Bbox { get; set; }
 
 		// @property (nonatomic) NSArray * textures;
 		[Export ("textures")]
@@ -1685,7 +1732,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyBoundingBox bbox;
 		[Export ("bbox")]
-		Bbox { get; set; }
+		MaplyBoundingBox Bbox { get; set; }
 
 		// @property (nonatomic, weak) NSObject<MaplyQuadImageOfflineDelegate> * delegate;
 		[Export ("delegate", ArgumentSemantic.Weak)]
@@ -1773,11 +1820,11 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyCoordinate ll;
 		[Export ("ll")]
-		Ll { get; set; }
+		MaplyCoordinate Ll { get; set; }
 
 		// @property (nonatomic) MaplyCoordinate ur;
 		[Export ("ur")]
-		Ur { get; set; }
+		MaplyCoordinate Ur { get; set; }
 
 		// -(MaplyCoordinateSystem *)buildCoordSystem;
 		[Export ("buildCoordSystem")]
@@ -1793,8 +1840,8 @@ namespace WhirlyGlobeMaply
 	interface MaplyWMSCapabilities {
 
 		// -(id)initWithXML:(DDXMLDocument *)xmlDoc;
-		[Export ("initWithXML:")]
-		IntPtr Constructor (DDXMLDocument xmlDoc);
+		//[Export ("initWithXML:")]
+		//IntPtr Constructor (DDXMLDocument xmlDoc);
 
 		// @property (nonatomic) NSString * name;
 		[Export ("name")]
@@ -1958,27 +2005,27 @@ namespace WhirlyGlobeMaply
 
 		// -(void)addBoundingBox:(MaplyBoundingBox *)bbox;
 		[Export ("addBoundingBox:")]
-		void AddBoundingBox ( bbox);
+		void AddBoundingBox (MaplyBoundingBox bbox);
 
 		// -(void)addGeoBoundingBox:(MaplyBoundingBox *)bbox;
 		[Export ("addGeoBoundingBox:")]
-		void AddGeoBoundingBox ( bbox);
+		void AddGeoBoundingBox (MaplyBoundingBox bbox);
 
 		// -(NSURLRequest *)requestForTile:(MaplyTileID)tileID;
 		[Export ("requestForTile:")]
-		NSUrlRequest RequestForTile ( tileID);
+		NSUrlRequest RequestForTile (MaplyTileID tileID);
 
 		// -(NSString *)fileNameForTile:(MaplyTileID)tileID;
 		[Export ("fileNameForTile:")]
-		string FileNameForTile ( tileID);
+		string FileNameForTile (MaplyTileID tileID);
 
 		// -(_Bool)tileIsLocal:(MaplyTileID)tileID;
 		[Export ("tileIsLocal:")]
-		bool TileIsLocal ( tileID);
+		bool TileIsLocal (MaplyTileID tileID);
 
 		// -(_Bool)validTile:(MaplyTileID)tileID bbox:(MaplyBoundingBox *)bbox;
 		[Export ("validTile:bbox:")]
-		bool ValidTile ( tileID,  bbox);
+		bool ValidTile (MaplyTileID tileID, MaplyBoundingBox bbox);
 	}
 
 	// @protocol MaplyRemoteTileSourceDelegate <NSObject>
@@ -1988,11 +2035,11 @@ namespace WhirlyGlobeMaply
 
 		// @optional -(void)remoteTileSource:(id)tileSource tileDidLoad:(MaplyTileID)tileID;
 		[Export ("remoteTileSource:tileDidLoad:")]
-		void TileDidLoad (NSObject tileSource,  tileID);
+		void TileDidLoad (NSObject tileSource, MaplyTileID tileID);
 
 		// @optional -(void)remoteTileSource:(id)tileSource tileDidNotLoad:(MaplyTileID)tileID error:(NSError *)error;
 		[Export ("remoteTileSource:tileDidNotLoad:error:")]
-		void TileDidNotLoad (NSObject tileSource,  tileID, NSError error);
+		void TileDidNotLoad (NSObject tileSource, MaplyTileID tileID, NSError error);
 	}
 
 	// @interface MaplyRemoteTileSource : NSObject <MaplyTileSource>
@@ -2034,7 +2081,7 @@ namespace WhirlyGlobeMaply
 
 		// -(id)imageForTile:(MaplyTileID)tileID;
 		[Export ("imageForTile:")]
-		NSObject ImageForTile ( tileID);
+		NSObject ImageForTile (MaplyTileID tileID);
 	}
 
 	// @interface MaplyMultiplexTileSource : NSObject <MaplyTileSource>
@@ -2143,7 +2190,7 @@ namespace WhirlyGlobeMaply
 
 		// -(MaplyElevationChunk *)elevForTile:(MaplyTileID)tileID;
 		[Export ("elevForTile:")]
-		MaplyElevationChunk ElevForTile ( tileID);
+		MaplyElevationChunk ElevForTile (MaplyTileID tileID);
 	}
 
 	// @interface MaplyVectorTileStyleSettings : NSObject
@@ -2231,7 +2278,7 @@ namespace WhirlyGlobeMaply
 		[Export ("formatText:forObject:")]
 		string FormatText (string formatString, MaplyVectorObject vec);
 	}
-*/
+
 	// @interface MaplyVectorTiles : NSObject <MaplyPagingDelegate>
 	[BaseType (typeof (NSObject))]
 	interface MaplyVectorTiles : MaplyPagingDelegate {
@@ -2311,8 +2358,8 @@ namespace WhirlyGlobeMaply
 		IntPtr Constructor (CGSize size);
 
 		// @property (assign, nonatomic) MaplyLinearTextureOpacity opacityFunc;
-		[Export ("opacityFunc", ArgumentSemantic.UnsafeUnretained)]
-		OpacityFunc opactiyFunc { get; set; }
+		//[Export ("opacityFunc", ArgumentSemantic.UnsafeUnretained)]
+		//MaplyLinearTextureOpacity opactiyFunc { get; set; }
 
 		// -(void)setPattern:(NSArray *)elements;
 		[Export ("setPattern:")]
@@ -2377,7 +2424,7 @@ namespace WhirlyGlobeMaply
 
 		// @property (nonatomic) MaplyCoordinate pos;
 		[Export ("pos")]
-		Pos pos { get; set; }
+		MaplyCoordinate pos { get; set; }
 	}
 
 	// @protocol WhirlyGlobeViewControllerAnimationDelegate <NSObject>
@@ -2658,7 +2705,7 @@ namespace WhirlyGlobeMaply
 
 	// @interface MapnikStyleSet : NSObject <NSXMLParserDelegate, VectorStyleDelegate>
 	[BaseType (typeof (NSObject))]
-	interface MapnikStyleSet : NSXMLParserDelegate, VectorStyleDelegate {
+	interface MapnikStyleSet : /*NSXMLParserDelegate,*/ VectorStyleDelegate {
 
 		// -(instancetype)initForViewC:(MaplyBaseViewController *)viewC;
 		[Export ("initForViewC:")]
